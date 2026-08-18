@@ -1,8 +1,7 @@
 #11. Construa uma cadeia de influência que passe por ALGOL, Pascal e C. Depois contraste essa linhagem imperativa com a proposta declarativa de Prolog.
 
 ALGOL 68 trouxe importantes inovações para o projeto de linguagens, principalmente a ortogonalidade, que permite combinar recursos de forma independente e previsível, além de tipos definidos pelo usuário e vetores dinâmicos.
-Seu principal sucessor, Pascal, foi criado para o ensino e teve grande impacto nas universidades nos anos 70, destacando-se pela simplicidade e expressividade. C, por sua vez, foi desenvolvida inicialmente para programação de sistemas e se tornou muito utilizada em diversas áreas, embora tenha uma verificação de tipos limitada.
-Já Prolog pertence à programação lógica e utiliza o cálculo de predicados. Diferentemente das linguagens imperativas, é não procedural, pois descreve as informações e condições necessárias, deixando o computador realizar o processo de inferência para encontrar os resultados.
+Seu principal sucessor, Pascal, foi criado para o ensino e teve grande impacto nas universidades nos anos 70, destacando-se pela simplicidade e expressividade.
 
 #12. Modele em linguagem natural uma pequena base Prolog com dois fatos, uma regra e uma consulta. Explique por que isso representa programação lógica, não apenas armazenamento de dados.
 
