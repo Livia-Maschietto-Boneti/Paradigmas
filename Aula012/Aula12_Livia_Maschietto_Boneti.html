@@ -1,0 +1,175 @@
+<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>Aula 12 · Lívia Maschietto Boneti</title><style>body{font:15px/1.5 "Segoe UI",system-ui,sans-serif;max-width:820px;margin:2rem auto;padding:0 16px;color:#111}h2{border-bottom:2px solid #ddd;padding-bottom:.25rem;margin-top:1.6rem}dt{font-weight:700;margin-top:.6rem}dd{margin:.2rem 0 0;white-space:pre-wrap}dd.vazio{color:#b42318;font-style:italic}img{max-width:100%;border:1px solid #ccc;border-radius:6px}pre{background:#f4f4f4;padding:.6rem;border-radius:6px;white-space:pre-wrap;font:12.5px/1.45 Consolas,monospace}</style><h1>Laboratório Funcional · Aula 12</h1><p>Lívia Maschietto Boneti · RA 24000749-2 · Turma A<br>Gerado em 16/10/2026, 20:28:06 · tempo registrado no cronômetro: 50:24</p><h2>Preparação: Programar com funções matemáticas</h2><dl><dt>def area(r): return 3.14159 * r * r</dt><dd>Pura</dd><dt>def agora(): return datetime.now()</dt><dd>Impura</dd><dt>def total(lista): return sum(lista)</dt><dd>Pura</dd><dt>def registra(msg): print(msg)</dt><dd>Impura</dd><dt>def sorteia(): return random.randint(1, 6)</dt><dd>Impura</dd><dt>def poe(lista, x): lista.append(x); return lista</dt><dd>Impura</dd><dt>0.1 Escolha duas funções que você marcou como impuras e explique, para cada uma, o que a impede de ser pura.</dt><dd>def agora(): return datetime.now() - Data atual sempre muda, caso seja visualizado em dias diferentes
+
+def sorteia(): return random.randint(1, 6) - sempre será gerado um valor randômico, não sendo possível pois depende de variáveis que mudam seus valores.</dd></dl><h2>Prática 1: Funções puras e formas funcionais</h2><dl><dt>Previsão: O que as linhas 1, 4 e 7 vão imprimir?</dt><dd>1)
+1: A-1 A-2
+
+4)
+4: 14
+
+7)
+7: [7, 3, 9] [3, 7, 9]</dd><dt>Saídas (original e com compor(g, f))</dt><dd><pre>Antes)
+1: A-1 A-2
+2: True
+3: 8
+4: 14
+5: [4, 9, 16]
+6: 29
+7: [7, 3, 9] [3, 7, 9]
+8: [3, 7, 9]
+
+Após) 
+1: A-1 A-2
+2: True
+3: 8
+4: 18
+5: [4, 9, 16]
+6: 29
+7: [7, 3, 9] [3, 7, 9]
+8: [3, 7, 9]</pre></dd><dt>1.1 Por que proximo_id("A") devolve valores diferentes para a mesma entrada? Por que isso dificulta os testes (p. 637)?</dt><dd>A função proximo_id("A") devolve valores diferentes porque depende da variável global "contador".
+A principal dificuldade seria controlar ou reinicializar a variável global para obter resultados que sejam previsíveis.</dd><dt>1.2 compor(f, g)(4) e compor(g, f)(4) deram valores diferentes. Calcule os dois à mão e explique a diferença.</dt><dd>compor(f, g)(4) - Executa primeiro o a variável g.
+
+compor(g, f)(4) - Executa primeiro o a variável f.</dd><dt>1.3 Qual é a diferença entre sorted(notas) e notas.sort()? Qual dos dois segue o estilo funcional, e por quê?</dt><dd>sorted(notas) cria uma nova lista ordenada, sem alterar a lista original.
+
+notas.sort() ordena a própria lista, alterando seus valores originais.</dd></dl><h2>Prática 2: Scheme: tudo é lista</h2><dl><dt>Previsão: (car '(A B C))</dt><dd>3</dd><dt>Previsão: (cdr '(A B C))</dt><dd>7 10 2</dd><dt>Previsão: (cons '(A B) '(C D))</dt><dd>3 7 10 2 2 3 4</dd><dt>Saídas (original e sem o apóstrofo)</dt><dd><pre>22
+14
+25
+8
+negativo
+A
+(B C)
+(A B C)
+((A B) C D)
+B
+
+22
+14
+25
+8
+negativo
+Backtrace:
+           5 (primitive-load "/box/main.scm")
+In ice-9/eval.scm:
+   191:35  4 (_ #f)
+   191:35  3 (_ #f)
+   196:27  2 (_ #f)
+   223:20  1 (proc #&lt;directory (guile-user) 10d173ec7c80&gt;)
+In unknown file:
+           0 (%resolve-variable (7 . A) #&lt;directory (guile-user) 10d…&gt;)
+
+ERROR: In procedure %resolve-variable:
+Unbound variable: A</pre></dd><dt>2.1 Para que serve o apóstrofo (')? O que o Scheme tentou fazer com (A B C) quando ele não estava lá?</dt><dd>O apóstrofo ( ' ) serve para impedir que o scheme avalie uma expressão, tratando como dado.</dd><dt>2.2 Escreva uma expressão que devolva o terceiro elemento de '(A B C) usando só car e cdr. Teste no OneCompiler e cole aqui a expressão e o resultado.</dt><dd><pre>(car (cdr (cdr '(A B C))))</pre></dd></dl><h2>Prática 3: Recursão e recursão em cauda</h2><dl><dt>O que vi no passo a passo</dt><dd>n = 4: comum em 8 passos, até 3 multiplicações esperando (expressão de até 30 caracteres); em cauda em 6 passos, nada esperando (até 17 caracteres).
+n = 6: comum em 12 passos, até 5 multiplicações esperando (expressão de até 42 caracteres); em cauda em 8 passos, nada esperando (até 18 caracteres).</dd><dt>Previsão: O programa em Scheme chama conta-ate recursivamente um milhão de vezes. Vai funcionar? E a mesma função em Python?</dt><dd>Não irá funcionar.</dd><dt>Saída do Scheme</dt><dd><pre>#t
+#f
+2432902008176640000
+2432902008176640000
+1000000</pre></dd><dt>Saída do Python (as últimas linhas bastam)</dt><dd><pre>500
+Traceback (most recent call last):
+  File "/box/main.py", line 9, in &lt;module&gt;
+    print(conta_ate(1_000_000, 0))
+          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/box/main.py", line 6, in conta_ate
+    return conta_ate(n - 1, acc + 1)     # a chamada é a última operação
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/box/main.py", line 6, in conta_ate
+    return conta_ate(n - 1, acc + 1)     # a chamada é a última operação
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/box/main.py", line 6, in conta_ate
+    return conta_ate(n - 1, acc + 1)     # a chamada é a última operação
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  [Previous line repeated 996 more times]
+RecursionError: maximum recursion depth exceeded</pre></dd><dt>3.1 No passo a passo, o que cresce na recursão comum e não cresce na recursão em cauda? Por quê?</dt><dd>Na recursão comum as chamadas ficam pendentes na pilha de execução pois ainda há operações para realizar quando cada chamada terminar.
+Na recursão em cauda, a chamada recursiva é a última operação da função.</dd><dt>3.2 Por que o Scheme fez um milhão de chamadas e o Python parou com RecursionError? (Dica: releia o quadro sobre a otimização da chamada em cauda e a mensagem de erro do Python. O livro fala do Scheme na p. 656.)</dt><dd>O scheme suporta a otimização de chamadas em cauda, conforme a linguagem exige.
+Porém Python não otimiza de forma direta as chamadas em cauda.</dd></dl><h2>Prática 4: Mão na massa: três funções sobre listas</h2><dl><dt>Saída final (com os três ok)</dt><dd><pre>tamanho: 0  (esperado 3)
+soma-quadrados: 0  (esperado 14)
+pares: ()  (esperado (2 4 6))
+
+tamanho: 3  ok
+soma-quadrados: 14  ok
+pares: (2 4 6)  ok</pre></dd><dt>4.1 Cole aqui as suas três funções (tamanho, soma-quadrados e pares).</dt><dd><pre>(define (tamanho lis)
+  (if (null? lis '())
+      0
+      (+ 1 (tamanho (cdr lis)))))
+
+(define (soma-quadrados lis)
+  (if (null? lis '())
+      0
+      (+ (* (car lis) (car lis))
+         (soma-quadrados (cdr lis)))))
+
+
+(define (pares lis)
+  (cond ((null? lis '()) '())
+        ((even? (car lis))
+         (cons (car lis) (pares (cdr lis))))
+        (else (pares (cdr lis))))
+
+)</pre></dd><dt>4.2 Qual foi a parte mais difícil? Onde você usou null?, car e cdr em cada função?</dt><dd>Tive dificuldades de qual maneira a recursão funciona e quando deveria parar.
+
+null? para verificar se a lista está vazia.
+
+tamanho: cdr
+soma-quadrados: car
+pares: car</dd></dl><h2>Prática 5: Haskell: padrões, compreensões e preguiça</h2><dl><dt>Previsão: squares é uma lista infinita. O que você acha que take 5 squares imprime? E primeiro 42 (div 1 0)?</dt><dd>[0,1,4,9,16],
+42</dd><dt>Saídas (original e com member 17)</dt><dd><pre>2432902008176640000
+[1,2,4,7,14]
+[2,2,4,7,8,9]
+[0,1,4,9,16]
+[0,1,4,9,16,25,36,49]
+True
+42
+
+Main.hs:27:1: error:
+    Parse error: module header, import declaration
+    or top-level declaration expected.
+   |
+27 | print (member 17 squares)                 -- tire o "--" do começo desta linha
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^</pre></dd><dt>5.1 Como o Haskell consegue imprimir parte de uma lista infinita? E por que primeiro 42 (div 1 0) não deu erro de divisão por zero?</dt><dd>O Haskell usa avaliação preguiçosa, só calcula quando necessário,
+
+take 5 squares calcula apenas os cinco primeiros quadrados,
+
+primeiro 42 (div 1 0) devolve 42 porque a função primeiro, ignorando o segundo argumento.</dd><dt>5.2 O que aconteceu com member 17 squares? Por que ele nunca termina, enquanto member 16 squares terminou? Como você corrigiria? (Dica: squares está em ordem crescente. Quando já dá para desistir da busca? O livro mostra uma solução na p. 670.)</dt><dd>A lista squares contém os quadrados dos números naturais em ordem crescente, member 17 squares nunca termina porque 17 não é um quadrado perfeito.
+
+Pensei em parar a procura quando o elemento atual for maior do que o valor procurado.</dd></dl><h2>Prática 6: Você já usa funcional</h2><dl><dt>Previsão: O que mais10(5) e [1, 2, 3].map(vezes(5)) vão imprimir?</dt><dd>5 10 15</dd><dt>Saída do JavaScript</dt><dd><pre>15
+[ 5, 10, 15 ]
+56
+{ nome: 'Ana', nota: 7 } { nome: 'Ana', nota: 8 }</pre></dd><dt>Saída do Java</dt><dd><pre>14
+18
+1050.0
+[CABO, MONITOR, MOUSE, TECLADO]</pre></dd><dt>6.1 somador(10) já terminou de executar quando mais10(5) é chamado. Como a função devolvida ainda "lembra" o 10?</dt><dd>Isso acontece por causa de um fechamento.
+
+ Quando somador(10) é executada, ela retorna uma função interna que utiliza a variável n.</dd><dt>6.2 Por que f.compose(g).apply(4) e f.andThen(g).apply(4) deram resultados diferentes? Qual deles corresponde ao compor(f, g) da Prática 1?</dt><dd>As duas operações aplicam as funções em ordens diferentes)
+
+f.compose(g).apply(4): primeiro g(4) = 12, depois f(12) = 14.
+
+f.andThen(g).apply(4): primeiro f(4) = 6, depois g(6) = 18.</dd></dl><h2>Prática 7: O laço vira pipeline</h2><dl><dt>7.1 Primeiro exercício escolhido (1, 2 ou 3): cole o seu código reescrito.</dt><dd><pre>Java 1
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        List&lt;Integer&gt; nums = List.of(3, 8, 5, 12, 7, 6);
+
+        int soma = nums.stream()
+            .filter(n -&gt; n % 2 == 0)
+            .mapToInt(n -&gt; n * n)
+            .sum();
+
+        System.out.println(soma);
+    }
+}</pre></dd><dt>7.2 Segundo exercício escolhido: cole o seu código reescrito.</dt><dd><pre>JavaScript 2
+const alunos = [
+  { nome: "Ana", nota: 8.5 },
+  { nome: "Bruno", nota: 5.0 },
+  { nome: "Carla", nota: 7.0 },
+  { nome: "Davi", nota: 9.5 },
+];
+
+const aprovados = alunos
+  .filter((aluno) =&gt; aluno.nota &gt;= 6)
+  .map((aluno) =&gt; aluno.nome.toUpperCase());
+
+console.log(aprovados.join(", "));</pre></dd><dt>Saídas das suas versões</dt><dd><pre>Java: 244
+JavaScript: ANA, CARLA, DAVI</pre></dd><dt>7.3 Qual versão é mais fácil de ler: a com laço ou a funcional? E qual é mais fácil de depurar (por exemplo, para ver um valor intermediário)?</dt><dd>Pra mim, a laço é mais fácil para leitura.
+Para depurar, penso ser a funcional a mais fácil.</dd></dl><h2>Fechamento: O que fica do paradigma funcional</h2><dl><dt>Uma função pura pode ler uma variável global que muda.</dt><dd>Falso</dd><dt>Em Scheme, a recursão em cauda não faz a pilha crescer.</dt><dd>Verdadeiro</dd><dt>O Python otimiza a recursão em cauda.</dt><dd>Falso</dd><dt>Em Haskell, [1 ..] só é calculada à medida que é usada.</dt><dd>Verdadeiro</dd><dt>filter, map e reduce dispensam laço e variável acumuladora.</dt><dd>Verdadeiro</dd><dt>Currying transforma uma função de vários parâmetros numa cadeia de funções de um parâmetro.</dt><dd>Verdadeiro</dd><dt>8.1 Qual versão é mais fácil de entender, e por quê? O livro estima que um programa funcional costuma levar cerca de 2 vezes mais tempo para executar (p. 678). Em que tipo de sistema você aceitaria esse custo, e em qual não?</dt><dd>A versão em Haskell é mais fácil de entender porque é mais curta e expressa diretamente as operações. 
+Aceitaria em sistemas simples.</dd><dt>8.2 Em uma frase: o que mais surpreendeu você nesta atividade?</dt><dd>A programação permite tudo, como fazer a mesma tarefa com menos código e sem precisar de laços e variáveis acumuladoras.</dd><dt>8.3 Qual é o erro de impressão, e como corrigir? O que a mensagem do compilador diz sobre o tipo que ele inferiu?</dt><dd>O erro de impressão está em b &lt;- h, que deveria ser b &lt;= h, o correto é &lt;=, pois queremos selecionar os elementos menores ou iguais a 'h'.
+
+A mensagem do compilador indica que ele inferiu tipos incompatíveis.</dd></dl></html>
